@@ -168,7 +168,7 @@ Renova em {formatDate(currentPlan.renewalDate)}
 <View style={styles.divider} />
 <Text style={styles.subsectionTitle}>Apps sem desconto da franquia</Text>
 <View style={styles.appsRow}>
-{currentPlan.includedApps.map((app) => (
+{currentPlan.includedApps.map((app: string) => (
 <View key={app} style={styles.appChip}>
 <Feather
 name={(appIcons[app] || 'smartphone') as any}

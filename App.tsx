@@ -143,12 +143,6 @@ function AppContent() {
    * Define cor padrão global para todos os componentes Text e TextInput.
    * Sem isso, React Native usa preto como default, ficando invisível no Night mode.
    */
-  if (Text.defaultProps == null) Text.defaultProps = {};
-  Text.defaultProps.style = { color: colors.textPrimary };
-
-  if (TextInput.defaultProps == null) TextInput.defaultProps = {};
-  TextInput.defaultProps.placeholderTextColor = colors.inputPlaceholder;
-  TextInput.defaultProps.style = { color: colors.textPrimary };
 
   return (
     <SafeAreaProvider style={{ flex: 1, backgroundColor: colors.background }}>
