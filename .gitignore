@@ -1,0 +1,57 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Expo
+.expo/
+.expo-shared/
+dist/
+web-build/
+
+# React Native
+*.log
+*.hprof
+
+# Metro
+.metro-cache/
+
+# TypeScript
+*.tsbuildinfo
+
+# macOS
+.DS_Store
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.production
+
+# Convex
+convex/.env*
+.convex/
+
+# Build output
+build/
+coverage/
+
+# IDEs
+.vscode/
+.idea/
+
+# Xcode
+ios/build/
+DerivedData/
+
+# Android
+android/.gradle/
+android/app/build/
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+
