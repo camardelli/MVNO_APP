@@ -10,6 +10,8 @@
  */
 
 import React from 'react';
+import 'react-native-gesture-handler';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -156,8 +158,10 @@ function AppContent() {
 
 export default function App() {
   return (
-    <ThemeProvider>
-      <AppContent />
-    </ThemeProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+    	<ThemeProvider>
+      	<AppContent />
+    	</ThemeProvider>
+    </GestureHandlerRootView>
   );
 }
