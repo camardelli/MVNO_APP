@@ -3,13 +3,14 @@
  * 
  * Reproduz video institucional SKY em tela cheia.
  * Após o video, aguarda 1s e navega para a próxima tela.
+ * Se o vídeo falhar, navega imediatamente.
  * 
  * @module screens/SplashScreen
  */
 
-import React, { useEffect, useRef, useCallback, useState } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
-import { Video } from 'expo-av';
+import { Video, ResizeMode } from 'expo-av';
 import { useAppStore } from '../store/useAppStore';
 import { colors } from '../lib/theme';
 
@@ -38,15 +39,16 @@ export default function SplashScreen({ navigation }: any) {
     }, 1000);
   }, [isAuthenticated, hasSeenOnboarding, navigation]);
 
-  // Restore session on mount
   useEffect(() => {
     restoreSession();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Set playback rate when video is ready
   const onReadyForDisplay = useCallback(() => {
-    videoRef.current?.setRateAsync?.(2.5, true);
+    try {
+      videoRef.current?.setRateAsync?.(2.5, true);
+    } catch (e) {
+      // ignore rate errors
+    }
   }, []);
 
   const onPlaybackStatusUpdate = useCallback((status: any) => {
@@ -62,16 +64,16 @@ export default function SplashScreen({ navigation }: any) {
     }
   }, [navigateNext]);
 
-  const onError = useCallback((error: string) => {
-    console.log('Video load error:', error);
+  const onError = useCallback(() => {
+    console.log('Video failed to load, skipping...');
     navigateNext();
   }, [navigateNext]);
 
-  // Safety timeout: navigate after 10 seconds no matter what
+  // Safety timeout: 5s max
   useEffect(() => {
     const timeout = setTimeout(() => {
       navigateNext();
-    }, 10000);
+    }, 5000);
     return () => clearTimeout(timeout);
   }, [navigateNext]);
 
@@ -81,7 +83,7 @@ export default function SplashScreen({ navigation }: any) {
         ref={videoRef}
         source={{ uri: VIDEO_URI }}
         style={styles.video}
-        resizeMode={'cover' as any}
+        resizeMode={ResizeMode.COVER}
         shouldPlay
         isLooping={false}
         isMuted
@@ -104,6 +106,5 @@ const styles = StyleSheet.create({
   video: {
     width: screenWidth,
     height: screenHeight,
-    borderRadius: 12,
   },
 });

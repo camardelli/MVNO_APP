@@ -57,27 +57,32 @@ try {
 await login({ cpf: cleanCpf, password, deviceId: 'device-001' });
 
 /** Após login bem-sucedido, oferece ativação de biometria */
-const biometricEnabled = await AsyncStorage.getItem('biometricEnabled');
-if (!biometricEnabled) {
-  const compatible = await LocalAuthentication.hasHardwareAsync();
-  const enrolled = await LocalAuthentication.isEnrolledAsync();
-  if (compatible && enrolled) {
-    Alert.alert(
-      'Biometria',
-      'Deseja ativar o login por biometria (impressão digital ou Face ID)?',
-      [
-        { text: 'Agora não', style: 'cancel', onPress: () => {
-          AsyncStorage.setItem('biometricEnabled', 'declined');
-          navigation.reset({ index: 0, routes: [{ name: 'MainTabs' }] });
-        }},
-        { text: 'Ativar', onPress: async () => {
-          await AsyncStorage.setItem('biometricEnabled', 'true');
-          navigation.reset({ index: 0, routes: [{ name: 'MainTabs' }] });
-        }},
-      ]
-    );
-    return;
+try {
+  const biometricEnabled = await AsyncStorage.getItem('biometricEnabled');
+  if (!biometricEnabled) {
+    const compatible = await LocalAuthentication.hasHardwareAsync();
+    const enrolled = await LocalAuthentication.isEnrolledAsync();
+    if (compatible && enrolled) {
+      Alert.alert(
+        'Biometria',
+        'Deseja ativar o login por biometria (impressão digital ou Face ID)?',
+        [
+          { text: 'Agora não', style: 'cancel', onPress: () => {
+            AsyncStorage.setItem('biometricEnabled', 'declined');
+            navigation.reset({ index: 0, routes: [{ name: 'MainTabs' }] });
+          }},
+          { text: 'Ativar', onPress: async () => {
+            await AsyncStorage.setItem('biometricEnabled', 'true');
+            navigation.reset({ index: 0, routes: [{ name: 'MainTabs' }] });
+          }},
+        ]
+      );
+      return;
+    }
   }
+} catch (bioErr) {
+  // Biometric check failed (e.g. web preview) - proceed normally
+  console.log('Biometric check skipped:', bioErr);
 }
 
 navigation.reset({ index: 0, routes: [{ name: 'MainTabs' }] });
